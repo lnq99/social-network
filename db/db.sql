@@ -112,31 +112,3 @@ drop table if exists Relationship;
 drop table if exists Comment;
 drop table if exists Post;
 drop table if exists Profile;
-
-
-alter table Comment
-drop constraint comment_postid_fkey,
-add  constraint comment_postid_fkey
-foreign key (postId) references Post(id) on delete cascade;
-
-
-alter table Reaction
-drop constraint reaction_postid_fkey,
-add  constraint reaction_postid_fkey
-foreign key (postId) references Post(id) on delete cascade;
-
-
-select count(*) from Profile;
-select count(*) from Post;
-select count(*) from Comment;
-select count(*) from Reaction;
-select count(*) from Relationship;
-select count(*) from Notification;
-select count(*) from Album;
-select count(*) from Photo;
-
--- 314,4458,138022,52716,6031,99627,628,1450
--- 1208,11372,478189,217345,31921,354323,2416,4077
-
-explain analyse
-select * from Profile where id = 1000;
