@@ -99,11 +99,11 @@
 
 Наличие одного из браузеров на устройстве:
 
-- Google Chrome
-- Mozilla Firefox
-- Opera
-- Safari
-- Yandex
+- Google Chrome - 100.0.4896.60
+- Mozilla Firefox - 98.0.2
+- Opera - 75.0.3969.171
+- Safari - 14
+- Yandex - 22.1.5
 
 ## Стек технологий
 
