@@ -1,0 +1,68 @@
+name: Continuous Integration
+
+on:
+  pull_request:
+    branches: [main]
+
+jobs:
+  linting:
+    name: Checking style
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Super-Linter
+        uses: github/super-linter@v4.9.2
+
+  testing:
+    name: Testing
+    runs-on: ubuntu-latest
+
+    # services:
+    #   postgres:
+    #     image: postgres:14-alpine
+    #     env:
+    #       POSTGRES_USER: root
+    #       POSTGRES_PASSWORD: pw
+    #       POSTGRES_DB: db_test
+    #     ports:
+    #       - 5433:5432
+    #     options: >-
+    #       --health-cmd pg_isready
+    #       --health-interval 10s
+    #       --health-timeout 5s
+    #       --health-retries 5
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Go
+        uses: actions/setup-go@v3
+        with:
+          go-version: 1.18
+
+      - name: Install dependencies
+        run: go mod tidy
+        working-directory: server
+
+      - name: unit
+        run: make unit
+        working-directory: server
+
+      # - name: Install golang-migrate
+      #   run: |
+      #     curl -L https://github.com/golang-migrate/migrate/releases/download/v4.15.1/migrate.linux-amd64.tar.gz | tar xvz
+      #     sudo mv migrate /usr/bin/migrate
+
+      # - name: Run migrations
+      #   run: make migrateup
+      #   working-directory: server
+
+      # - name: integration
+      #   run: make integration
+      #   working-directory: server
+
+      # - name: e2e
+      #   run: make e2e
+      #   working-directory: server
