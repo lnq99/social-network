@@ -15,10 +15,10 @@ jobs:
       # - name: Super-Linter
       #   uses: github/super-linter@v4.9.2
 
-      - name: golangci-lint
-        uses: golangci/golangci-lint-action@v3
-        with:
-          working-directory: server
+      # - name: golangci-lint
+      #   uses: golangci/golangci-lint-action@v3
+      #   with:
+      #     working-directory: server
 
   testing:
     name: Testing
