@@ -27,6 +27,4 @@ func main() {
 	ctrl := v1.NewController(services, &conf)
 
 	addr := conf.Host + ":" + conf.Port
-
-	_, _ = ctrl, addr
 }

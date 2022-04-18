@@ -76,21 +76,3 @@ func ExtractToken(r *http.Request) string {
 	bearerToken := r.Header.Get("Authorization")
 	tokenList := strings.Split(bearerToken, "Bearer ")
 	if len(tokenList) == 2 {
-		return tokenList[1]
-	}
-	return ""
-}
-
-func (m *Manager) ExtractTokenID(r *http.Request) (int, error) {
-	tokenStr := ExtractToken(r)
-	return m.ParseTokenId(tokenStr)
-}
-
-func Pretty(data interface{}) {
-	b, err := json.MarshalIndent(data, "", " ")
-	if err != nil {
-		log.Println(err)
-		return
-	}
-	fmt.Println(string(b))
-}
