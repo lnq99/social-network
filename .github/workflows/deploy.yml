@@ -36,7 +36,7 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           context: server
-          file: Dockerfile
+          file: server/Dockerfile
           push: true
           tags: ${{ secrets.DOCKER_HUB_USERNAME }}/social-network:api
 
@@ -71,6 +71,6 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           context: client
-          file: Dockerfile
+          file: client/Dockerfile
           push: true
           tags: ${{ secrets.DOCKER_HUB_USERNAME }}/social-network:web
