@@ -52,3 +52,21 @@ func (r profileRepoImpl) SelectByEmail(email string) (p model.Profile, err error
 	err = scanProfile(row, &p)
 	return
 }
+
+func (r profileRepoImpl) UpdateAvatar(photo model.Photo) (err error) {
+	query := `update Profile set avartarL=$1 where id=$2`
+	res, err := r.db.Exec(query, photo.Url, photo.UserId)
+	if err == nil {
+		err = handleRowsAffected(res)
+	}
+	return
+}
+
+func (r profileRepoImpl) UpdateIntro(id int, intro string) (err error) {
+	query := `update Profile set intro=$1 where id=$2`
+	res, err := r.db.Exec(query, intro, id)
+	if err == nil {
+		err = handleRowsAffected(res)
+	}
+	return
+}
