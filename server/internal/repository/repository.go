@@ -23,6 +23,8 @@ type ProfileRepo interface {
 	SelectByEmail(email string) (model.Profile, error)
 	UpdateAvatar(photo model.Photo) error
 	UpdateIntro(id int, intro string) error
+	SearchName(id int, s string) (string, error)
+	SelectFeed(id, limit, offset int) ([]int64, error)
 	//Update(profile *model.Profile) error
 	//Delete(id int) error
 }

@@ -4,6 +4,8 @@ import (
 	"database/sql"
 
 	"app/internal/model"
+
+	"github.com/lib/pq"
 )
 
 type profileRepoImpl struct {
@@ -68,5 +70,24 @@ func (r profileRepoImpl) UpdateIntro(id int, intro string) (err error) {
 	if err == nil {
 		err = handleRowsAffected(res)
 	}
+	return
+}
+
+func (r profileRepoImpl) SearchName(id int, s string) (res string, err error) {
+	if len(s) >= 2 {
+		err = r.db.QueryRow("select search_name($1, $2)", id, s).Scan(&res)
+	}
+	if err != nil {
+		err = nil
+		res = "[]"
+	}
+	return
+}
+
+func (r profileRepoImpl) SelectFeed(id, limit, offset int) (feed []int64, err error) {
+	row := r.db.QueryRow("select feed($1, $2, $3)", id, limit, offset)
+	var arr pq.Int64Array
+	err = row.Scan(&arr)
+	feed = arr
 	return
 }
