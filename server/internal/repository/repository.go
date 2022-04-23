@@ -21,6 +21,8 @@ type ProfileRepo interface {
 	Insert(profile *model.Profile) (int, error)
 	Select(id int) (model.Profile, error)
 	SelectByEmail(email string) (model.Profile, error)
+	UpdateAvatar(photo model.Photo) error
+	UpdateIntro(id int, intro string) error
 	//Update(profile *model.Profile) error
 	//Delete(id int) error
 }
@@ -29,8 +31,9 @@ type PostRepo interface {
 	Insert(post *model.Post) (int, error)
 	Select(postId int) (model.Post, error)
 	SelectByUserId(userId int) ([]int64, error)
-	//Update(post *model.Post) error
-	//Delete(userId, postId int) error
+	Update(post *model.Post) error
+	Delete(userId, postId int) error
+	SelectReaction(postId int) ([]int64, error)
 }
 
 type CommentRepo interface {
@@ -44,6 +47,7 @@ type ReactionRepo interface {
 	InsertUpdate(userId, postId int, reaction string) error
 	Select(postId int) ([]model.Reaction, error)
 	SelectReactionOfUser(userId, postId int) (string, error)
+
 	//Update(userId, postId int, reaction string) error
 	//Delete(userId, postId int) error
 }
@@ -52,6 +56,11 @@ type RelationshipRepo interface {
 	Select(userId int) ([]model.Relationship, error)
 	Friends(userId int) ([]model.Relationship, error)
 	Requests(userId int) ([]model.Relationship, error)
+	FriendsDetail(userId int) (string, error)
+	MutualFriends(u1, u2 int) ([]int64, error)
+	SelectRelationshipWith(u1, u2 int) string
+	ChangeType(u1, u2 int, t string) error
+	Delete(u1, u2 int) error
 }
 
 type NotificationRepo interface {
