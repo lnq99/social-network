@@ -7,8 +7,8 @@ import cmt from './modules/cmt.js'
 import reaction from './modules/reaction.js'
 import relationship from './modules/relationship.js'
 import photo from './modules/photo.js'
-// import notif from './modules/notif.js'
-// import theme from './modules/theme.js'
+import notif from './modules/notif.js'
+import theme from './modules/theme.js'
 
 const store = createStore({
   state: {
@@ -27,8 +27,8 @@ const store = createStore({
     reaction,
     relationship,
     photo,
-    // notif,
-    // theme,
+    notif,
+    theme,
   },
 })
 

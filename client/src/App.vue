@@ -1,32 +1,57 @@
 <template>
-  <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </div>
-    <router-view/>
+  <div id="app" :class="this.$store.state.theme.isDark ? 'dark' : 'light'">
+    <router-view />
   </div>
 </template>
 
-<style>
+<style lang="scss">
+@import "./style.scss";
+
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  color: #2c3e50;
+  color: var(--text);
+  background: var(--bg);
+  height: 100%;
+  width: 100%;
+  display: flex;
+  // letter-spacing: 0.1px;
+  word-spacing: 0.1px;
+  line-height: 120%;
 }
 
-#nav {
-  padding: 30px;
+.input .el-textarea__inner {
+  border: none;
+  background-color: var(--bg);
+  color: var(--text);
+  opacity: 0.8;
 }
 
-#nav a {
-  font-weight: bold;
-  color: #2c3e50;
+.el-tree-node__content {
+  color: var(--text) !important;
+  padding-top: $p1 !important;
+  padding-bottom: $p1 !important;
+  height: initial !important;
+  .card {
+    background-color: var(--bg) !important;
+  }
 }
 
-#nav a.router-link-exact-active {
-  color: #42b983;
+.el-tree-node {
+  :hover,
+  :focus {
+    background-color: initial !important;
+  }
+  white-space: normal !important;
+}
+
+.el-tree__empty-block {
+  min-height: 20px;
+}
+
+.ava {
+  opacity: 0.9;
 }
 </style>
