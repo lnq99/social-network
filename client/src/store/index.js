@@ -1,10 +1,10 @@
 import './axios.config.js'
 import { createStore } from 'vuex'
-import auth from './modules/auth.js'
+import auth from './modules/auth.js.js'
 // import profile from './modules/profile.js'
-// import post from './modules/post.js'
-// import cmt from './modules/cmt.js'
-// import reaction from './modules/reaction.js'
+import post from './modules/post.js'
+import cmt from './modules/cmt.js'
+import reaction from './modules/reaction.js'
 // import relationship from './modules/relationship.js'
 // import photo from './modules/photo.js'
 // import notif from './modules/notif.js'
@@ -21,14 +21,14 @@ const store = createStore({
   },
   modules: {
     auth,
-    profile,
+    // profile,
     post,
     cmt,
     reaction,
-    relationship,
-    photo,
-    notif,
-    theme,
+    // relationship,
+    // photo,
+    // notif,
+    // theme,
   },
 })
 
