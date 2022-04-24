@@ -12,6 +12,19 @@ import (
 	"app/internal/service"
 )
 
+// @title Social Network
+// @version 1.0
+// @description Tiny social network.
+
+// @license.name Apache 2.0
+
+// @BasePath /api/v1
+// @query.collection.format multi
+
+// @securityDefinitions.apikey ApiKeyAuth
+// @in header
+// @name Authorization
+
 // Точка входа в программу.
 func main() {
 	confFile := ".env"
@@ -39,6 +52,7 @@ func main() {
 
 	router := controller.NewRouter()
 	router = ctrl.SetupRouter(router)
+	router = controller.SwaggerRouter(router)
 
 	addr := conf.Host + ":" + conf.Port
 	router.Run(addr)
