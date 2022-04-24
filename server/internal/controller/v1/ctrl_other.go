@@ -11,6 +11,19 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// Feed
+// @Summary Feed
+// @Description feed
+// @ID feed
+// @Tags feed
+// @Accept json
+// @Produce json
+// @Security ApiKeyAuth
+// @Param lim query int true "Limit"
+// @Param off query int true "Offset"
+// @Success 200 {object} []int64
+// @Failure 500 {object} Msg
+// @Router /feed [get]
 func (ctrl *Controller) Feed(c *gin.Context) {
 	//id := toInt(c.Param("id"))
 	ID := c.MustGet("ID").(int)
@@ -23,6 +36,18 @@ func (ctrl *Controller) Feed(c *gin.Context) {
 		ErrResponse{Code: http.StatusInternalServerError})
 }
 
+// Search
+// @Summary Search by username
+// @Description search by username
+// @ID search
+// @Tags search
+// @Accept json
+// @Produce json
+// @Security ApiKeyAuth
+// @Param id query int true "Key"
+// @Success 200 {object} []SearchResponse
+// @Failure 500 {object} Msg
+// @Router /search [get]
 func (ctrl *Controller) Search(c *gin.Context) {
 	ID := c.MustGet("ID").(int)
 	key := c.Query("k")

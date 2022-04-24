@@ -1,0 +1,889 @@
+basePath: /api/v1
+definitions:
+  model.Comment:
+    properties:
+      children:
+        items:
+          $ref: '#/definitions/model.Comment'
+        type: array
+      content:
+        type: string
+      created:
+        type: string
+      id:
+        type: integer
+      parentId:
+        type: integer
+      postId:
+        type: integer
+      userId:
+        type: integer
+    type: object
+  model.Notification:
+    properties:
+      cmtId:
+        type: integer
+      created:
+        type: string
+      fromUserId:
+        type: integer
+      id:
+        type: integer
+      postId:
+        type: integer
+      type:
+        type: string
+      userId:
+        type: integer
+    type: object
+  model.Photo:
+    properties:
+      albumId:
+        type: integer
+      created:
+        type: string
+      id:
+        type: integer
+      url:
+        type: string
+      userId:
+        type: integer
+    type: object
+  model.Post:
+    properties:
+      atchId:
+        type: integer
+      atchType:
+        type: string
+      atchUrl:
+        type: string
+      cmtCount:
+        type: integer
+      content:
+        type: string
+      created:
+        type: string
+      id:
+        type: integer
+      reaction:
+        items:
+          type: integer
+        type: array
+      tags:
+        type: string
+      userId:
+        type: integer
+    type: object
+  model.ShortInfo:
+    properties:
+      avatars:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+    type: object
+  service.CommentBody:
+    properties:
+      content:
+        type: string
+      parentId:
+        type: integer
+      postId:
+        type: integer
+    type: object
+  service.IntroBody:
+    properties:
+      intro:
+        type: string
+    type: object
+  service.LoginBody:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+    type: object
+  service.PostBody:
+    properties:
+      atchId:
+        type: integer
+      atchType:
+        type: string
+      atchUrl:
+        type: string
+      content:
+        type: string
+      tags:
+        type: string
+    type: object
+  service.ProfileBody:
+    properties:
+      birthdate:
+        type: string
+      email:
+        type: string
+      gender:
+        type: string
+      password:
+        type: string
+      username:
+        type: string
+    type: object
+  v1.FriendResponse:
+    properties:
+      avatars:
+        type: string
+      id:
+        type: integer
+      name:
+        type: integer
+    type: object
+  v1.GetMutualAndTypeResponse:
+    properties:
+      mutual:
+        items:
+          type: integer
+        type: array
+      type:
+        type: string
+    type: object
+  v1.Msg:
+    properties:
+      message:
+        type: string
+    type: object
+  v1.ProfileResponse:
+    properties:
+      avatarl:
+        type: string
+      avatars:
+        type: string
+      birthdate:
+        type: string
+      created:
+        type: string
+      gender:
+        type: string
+      id:
+        type: integer
+      intro:
+        type: string
+      name:
+        type: string
+      photoCount:
+        type: string
+      postCount:
+        type: string
+    type: object
+  v1.SearchResponse:
+    properties:
+      id:
+        type: integer
+      mutual:
+        type: integer
+      type:
+        type: string
+    type: object
+  v1.dataResponse:
+    properties:
+      data: {}
+    type: object
+  v1.loginResponse:
+    properties:
+      token:
+        type: string
+      user:
+        $ref: '#/definitions/v1.ProfileResponse'
+    type: object
+info:
+  contact: {}
+  description: Tiny social network.
+  license:
+    name: Apache 2.0
+  title: Social Network
+  version: "1.0"
+paths:
+  /auth/login:
+    post:
+      consumes:
+      - application/json
+      description: login
+      operationId: login
+      parameters:
+      - description: Login profile
+        in: body
+        name: profile
+        required: true
+        schema:
+          $ref: '#/definitions/service.LoginBody'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/v1.loginResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/v1.Msg'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/v1.Msg'
+      summary: Login
+      tags:
+      - auth
+  /auth/logout:
+    delete:
+      description: logout
+      operationId: logout
+      responses:
+        "200":
+          description: ""
+      security:
+      - ApiKeyAuth: []
+      summary: Logout
+      tags:
+      - auth
+  /auth/register:
+    post:
+      consumes:
+      - application/json
+      description: register
+      operationId: register
+      parameters:
+      - description: Register profile
+        in: body
+        name: profile
+        required: true
+        schema:
+          $ref: '#/definitions/service.ProfileBody'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: ""
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/v1.Msg'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/v1.Msg'
+      summary: Register
+      tags:
+      - auth
+  /cmt:
+    post:
+      consumes:
+      - application/json
+      description: post a comment
+      operationId: post-comment
+      parameters:
+      - description: Comment body
+        in: body
+        name: account
+        required: true
+        schema:
+          $ref: '#/definitions/service.CommentBody'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: ""
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/v1.Msg'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/v1.Msg'
+      security:
+      - ApiKeyAuth: []
+      summary: Post a comment
+      tags:
+      - comment
+  /cmt/:id:
+    get:
+      consumes:
+      - application/json
+      description: get comment tree
+      operationId: get-cmt-tree
+      parameters:
+      - description: Post ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.Comment'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/v1.Msg'
+      security:
+      - ApiKeyAuth: []
+      summary: Get comment tree
+      tags:
+      - comment
+  /feed:
+    get:
+      consumes:
+      - application/json
+      description: feed
+      operationId: feed
+      parameters:
+      - description: Limit
+        in: query
+        name: lim
+        required: true
+        type: integer
+      - description: Offset
+        in: query
+        name: "off"
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              type: integer
+            type: array
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/v1.Msg'
+      security:
+      - ApiKeyAuth: []
+      summary: Feed
+      tags:
+      - feed
+  /notif:
+    get:
+      consumes:
+      - application/json
+      description: get notification
+      operationId: get-notif
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/model.Notification'
+            type: array
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/v1.Msg'
+      security:
+      - ApiKeyAuth: []
+      summary: Get notification
+      tags:
+      - notification
+  /photo/{id}:
+    get:
+      consumes:
+      - application/json
+      description: get photo
+      operationId: get-photo
+      parameters:
+      - description: Photo ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.Photo'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/v1.Msg'
+      security:
+      - ApiKeyAuth: []
+      summary: Get photo
+      tags:
+      - photo
+  /photo/u/{id}:
+    get:
+      consumes:
+      - application/json
+      description: get photo by user id
+      operationId: get-photo-by-user-id
+      parameters:
+      - description: Profile ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/model.Photo'
+            type: array
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/v1.Msg'
+      security:
+      - ApiKeyAuth: []
+      summary: Get photo by user id
+      tags:
+      - photo
+  /post:
+    post:
+      consumes:
+      - application/json
+      description: post a post
+      operationId: post-post
+      parameters:
+      - description: Post body
+        in: body
+        name: account
+        required: true
+        schema:
+          $ref: '#/definitions/service.PostBody'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ""
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/v1.Msg'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/v1.Msg'
+      security:
+      - ApiKeyAuth: []
+      summary: Post a post
+      tags:
+      - post
+  /post/{id}:
+    delete:
+      description: delete a post
+      operationId: delete-post
+      parameters:
+      - description: Post ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: ""
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/v1.Msg'
+      security:
+      - ApiKeyAuth: []
+      summary: Delete a post
+      tags:
+      - post
+    get:
+      consumes:
+      - application/json
+      description: get post by ID
+      operationId: get-post-by-id
+      parameters:
+      - description: Post ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.Post'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/v1.Msg'
+      security:
+      - ApiKeyAuth: []
+      summary: Get post
+      tags:
+      - post
+  /post/u/{id}:
+    get:
+      consumes:
+      - application/json
+      description: get id of posts by user id
+      operationId: get-post-by-user-id
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              type: integer
+            type: array
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/v1.Msg'
+      security:
+      - ApiKeyAuth: []
+      summary: Get id of posts by user id
+      tags:
+      - post
+  /profile/{id}:
+    get:
+      consumes:
+      - application/json
+      description: get profile by ID
+      operationId: get-profile-by-id
+      parameters:
+      - description: Profile ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/v1.ProfileResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/v1.Msg'
+      security:
+      - ApiKeyAuth: []
+      summary: Get profile
+      tags:
+      - profile
+  /profile/intro:
+    patch:
+      consumes:
+      - application/json
+      description: change intro profile by ID
+      operationId: change-intro-profile-by-id
+      parameters:
+      - description: Intro body
+        in: body
+        name: account
+        required: true
+        schema:
+          $ref: '#/definitions/service.IntroBody'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ""
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/v1.Msg'
+      security:
+      - ApiKeyAuth: []
+      summary: Change intro of profile
+      tags:
+      - profile
+  /profile/short/{id}:
+    get:
+      consumes:
+      - application/json
+      description: get brief profile by ID
+      operationId: get-brief-profile-by-id
+      parameters:
+      - description: Profile ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.ShortInfo'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/v1.Msg'
+      security:
+      - ApiKeyAuth: []
+      summary: Get brief of profile
+      tags:
+      - profile
+  /react/{post_id}:
+    get:
+      consumes:
+      - application/json
+      description: get reaction by post id
+      operationId: get-reaction-by-post-id
+      parameters:
+      - description: Post ID
+        in: path
+        name: post_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              type: integer
+            type: array
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/v1.Msg'
+      security:
+      - ApiKeyAuth: []
+      summary: Get reaction of post
+      tags:
+      - reaction
+  /react/{post_id}/{type}:
+    put:
+      consumes:
+      - application/json
+      description: get reaction by post id
+      operationId: put-reaction
+      parameters:
+      - description: Post ID
+        in: path
+        name: post_id
+        required: true
+        type: integer
+      - description: Reaction type
+        in: path
+        name: type
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ""
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/v1.Msg'
+      security:
+      - ApiKeyAuth: []
+      summary: Get reaction of post
+      tags:
+      - reaction
+  /react/u/{post_id}:
+    get:
+      consumes:
+      - application/json
+      description: get reaction by user id and post id
+      operationId: get-reaction-by-user-post-id
+      parameters:
+      - description: Post ID
+        in: path
+        name: post_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/v1.dataResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/v1.Msg'
+      security:
+      - ApiKeyAuth: []
+      summary: Get user's reaction of post
+      tags:
+      - reaction
+  /rel/{id}/{type}:
+    put:
+      consumes:
+      - application/json
+      description: get change relationship
+      operationId: change-relationship
+      parameters:
+      - description: Profile ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Relationship type
+        in: path
+        name: type
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ""
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/v1.Msg'
+      security:
+      - ApiKeyAuth: []
+      summary: Change relationship
+      tags:
+      - relationship
+  /rel/friends/{id}:
+    get:
+      consumes:
+      - application/json
+      description: get friend detail
+      operationId: get-friend-detail
+      parameters:
+      - description: Friend ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/v1.FriendResponse'
+            type: array
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/v1.Msg'
+      security:
+      - ApiKeyAuth: []
+      summary: Get friend detail
+      tags:
+      - relationship
+  /rel/mutual-friends/{id}:
+    get:
+      consumes:
+      - application/json
+      description: get mutual friends
+      operationId: get-mutual-friend
+      parameters:
+      - description: Profile ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/v1.dataResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/v1.Msg'
+      security:
+      - ApiKeyAuth: []
+      summary: Get mutual friends count
+      tags:
+      - relationship
+  /rel/mutual-type/{id}:
+    get:
+      consumes:
+      - application/json
+      description: get mutual friends and type
+      operationId: get-mutual-friends-and-type
+      parameters:
+      - description: Profile ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/v1.GetMutualAndTypeResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/v1.Msg'
+      security:
+      - ApiKeyAuth: []
+      summary: Get mutual friends and type
+      tags:
+      - relationship
+  /search:
+    get:
+      consumes:
+      - application/json
+      description: search by username
+      operationId: search
+      parameters:
+      - description: Key
+        in: query
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/v1.SearchResponse'
+            type: array
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/v1.Msg'
+      security:
+      - ApiKeyAuth: []
+      summary: Search by username
+      tags:
+      - search
+securityDefinitions:
+  ApiKeyAuth:
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"

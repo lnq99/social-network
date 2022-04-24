@@ -10,6 +10,18 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// GetTreeComment
+// @Summary Get comment tree
+// @Description get comment tree
+// @ID get-cmt-tree
+// @Tags comment
+// @Accept json
+// @Produce json
+// @Security ApiKeyAuth
+// @Param id path int true "Post ID"
+// @Success 200 {object} model.Comment
+// @Failure 500 {object} Msg
+// @Router /cmt/:id [get]
 func (ctrl *Controller) GetTreeComment(c *gin.Context) {
 	cmt, err := ctrl.services.Comment.GetTree(toInt(c.Param("id")))
 	if err != nil {
@@ -24,6 +36,18 @@ func (ctrl *Controller) GetTreeComment(c *gin.Context) {
 		ErrResponse{Code: http.StatusInternalServerError})
 }
 
+// PostComment
+// @Summary Post a comment
+// @Description post a comment
+// @ID post-comment
+// @Tags comment
+// @Accept json
+// @Produce json
+// @Security ApiKeyAuth
+// @Param  account body service.CommentBody true "Comment body"
+// @Success 201
+// @Failure 422,500 {object} Msg
+// @Router /cmt [post]
 func (ctrl *Controller) PostComment(c *gin.Context) {
 	var cmtBody service.CommentBody
 	ID := c.MustGet("ID").(int)
