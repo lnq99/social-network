@@ -11,16 +11,19 @@ type CommentServiceImpl struct {
 	repo repository.CommentRepo
 }
 
+// Функция сервиса комментария
 func NewCommentService(repo repository.CommentRepo) CommentService {
 	return &CommentServiceImpl{repo}
 }
 
+// Функция получения дерева комментариев
 func (r *CommentServiceImpl) GetTree(postId int) (res string, err error) {
 	cmts, err := r.repo.Select(postId)
 	res = r.BuildCmtTree(cmts)
 	return
 }
 
+// Функция создания создания дерева комментарией
 func (r *CommentServiceImpl) BuildCmtTree(cmts []model.Comment) (tree string) {
 	m := make(map[int]*model.Comment)
 
@@ -51,6 +54,7 @@ func (r *CommentServiceImpl) BuildCmtTree(cmts []model.Comment) (tree string) {
 	return
 }
 
+// Функция добавления комментария
 func (r *CommentServiceImpl) Add(userId int, body CommentBody) (err error) {
 	cmt := model.Comment{
 		UserId:   userId,

@@ -10,6 +10,7 @@ type MultiScanner interface {
 	Scan(dest ...any) error
 }
 
+// Функция обработки ошибки БД в результате запросыа
 func handleRowsAffected(res sql.Result) error {
 	count, err := res.RowsAffected()
 	if err == nil && count == 0 {

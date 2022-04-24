@@ -1,5 +1,8 @@
 package model
 
+// Описание моделей БД
+
+// Модель профиля пользователя
 type Profile struct {
 	Id         int     `json:"id"`
 	Name       string  `json:"name"`
@@ -17,6 +20,7 @@ type Profile struct {
 	PhotoCount string  `json:"photoCount"`
 }
 
+// Модель публикации
 type Post struct {
 	Id       int     `json:"id"`
 	UserId   int     `json:"userId"`
@@ -30,6 +34,7 @@ type Post struct {
 	CmtCount int     `json:"cmtCount"`
 }
 
+// Модель комментария
 type Comment struct {
 	Id       int        `json:"id"`
 	UserId   int        `json:"userId"`
@@ -40,12 +45,14 @@ type Comment struct {
 	Children []*Comment `json:"children,omitempty"`
 }
 
+// Модель реакции
 type Reaction struct {
 	UserId int    `json:"userId"`
 	PostId int    `json:"postId"`
 	T      string `json:"type"`
 }
 
+// Модель связи 2 и более пользователей
 type Relationship struct {
 	User1   int    `json:"user1"`
 	User2   int    `json:"user2"`
@@ -54,6 +61,7 @@ type Relationship struct {
 	Other   string `json:"other"`
 }
 
+// Модель уведомлений
 type Notification struct {
 	Id         int    `json:"id"`
 	UserId     int    `json:"userId"`
@@ -64,6 +72,7 @@ type Notification struct {
 	CmtId      int    `json:"cmtId"`
 }
 
+// Модель альбома
 type Album struct {
 	Id      int    `json:"id"`
 	UserId  int    `json:"userId"`
@@ -71,6 +80,7 @@ type Album struct {
 	Created string `json:"created"`
 }
 
+// Модель фотографий пользователя
 type Photo struct {
 	Id      int    `json:"id"`
 	UserId  int    `json:"userId"`
@@ -79,6 +89,7 @@ type Photo struct {
 	Created string `json:"created"`
 }
 
+// Модель сокращенной информации о пользователя
 type ShortInfo struct {
 	Id      int    `json:"id"`
 	Name    string `json:"name"`

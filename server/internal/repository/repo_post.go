@@ -12,6 +12,7 @@ type postRepoImpl struct {
 	db *sql.DB
 }
 
+// Функция обновления публикации
 func (r postRepoImpl) Update(p *model.Post) (err error) {
 	query := `update Post set Tags=$2, Content=$3, AtchType=$4, AtchId=$5, AtchUrl=$6 where id=$1`
 	res, err := r.db.Exec(query, p.Id, p.Tags, p.Content, p.AtchType, p.AtchId, p.AtchUrl)
@@ -21,6 +22,7 @@ func (r postRepoImpl) Update(p *model.Post) (err error) {
 	return
 }
 
+// Функция удаления публикация
 func (r postRepoImpl) Delete(userId, postId int) (err error) {
 	query := `delete from Post where id=$2 and userId=$1`
 	res, err := r.db.Exec(query, userId, postId)
@@ -30,10 +32,12 @@ func (r postRepoImpl) Delete(userId, postId int) (err error) {
 	return
 }
 
+// Функция создания репозитория
 func NewPostRepo(db *sql.DB) PostRepo {
 	return &postRepoImpl{db}
 }
 
+// Функция считывания публикации
 func scanPost(row MultiScanner, p *model.Post) error {
 	var arr pq.Int64Array
 	err := row.Scan(
@@ -52,6 +56,7 @@ func scanPost(row MultiScanner, p *model.Post) error {
 	return err
 }
 
+// Функция добавления публикации
 func (r postRepoImpl) Insert(p *model.Post) (id int, err error) {
 	query := `insert into Post(userId, tags, content, atchType, atchId, atchUrl)
 		values ($1, $2, $3, $4, $5, $6) returning id`
@@ -60,12 +65,14 @@ func (r postRepoImpl) Insert(p *model.Post) (id int, err error) {
 	return
 }
 
+// Функция получения публикации
 func (r postRepoImpl) Select(postId int) (post model.Post, err error) {
 	row := r.db.QueryRow("select * from Post where id=$1 limit 1", postId)
 	err = scanPost(row, &post)
 	return
 }
 
+// Функция получения всех публикаций пользователя
 func (r postRepoImpl) SelectByUserId(userId int) (posts []int64, err error) {
 	row := r.db.QueryRow("select array(select id from Post where userId=$1 order by created desc)", userId)
 	var arr pq.Int64Array
@@ -74,6 +81,7 @@ func (r postRepoImpl) SelectByUserId(userId int) (posts []int64, err error) {
 	return
 }
 
+// Функция получения реакции на публикациюы
 func (r postRepoImpl) SelectReaction(postId int) (res []int64, err error) {
 	row := r.db.QueryRow("select reaction from Post where id=$1", postId)
 	var arr pq.Int64Array

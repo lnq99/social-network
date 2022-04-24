@@ -1,5 +1,6 @@
 package config
 
+// Конфигурация Базы Данных и Сервера
 type Config struct {
 	DbHost     string
 	DbPort     string

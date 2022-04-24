@@ -11,22 +11,27 @@ type RelationshipServiceImpl struct {
 	repo repository.RelationshipRepo
 }
 
+// Функция создания сервиса связи пользователей
 func NewRelationshipService(repo repository.RelationshipRepo) RelationshipService {
 	return &RelationshipServiceImpl{repo}
 }
 
+// Функция получения связей
 func (r *RelationshipServiceImpl) Get(id int) (rels []model.Relationship, err error) {
 	return r.repo.Select(id)
 }
 
+// Функция получения "Друзей"
 func (r *RelationshipServiceImpl) Friends(id int) (rels []model.Relationship, err error) {
 	return r.repo.Friends(id)
 }
 
+// Функция получения запросов на "Дружбу"
 func (r *RelationshipServiceImpl) Requests(id int) (rels []model.Relationship, err error) {
 	return r.repo.Requests(id)
 }
 
+// Функция получения информации о "Друзьях"
 func (r *RelationshipServiceImpl) FriendsDetail(id int) (string, error) {
 	return r.repo.FriendsDetail(id)
 }
@@ -35,6 +40,7 @@ func (r *RelationshipServiceImpl) MutualFriends(u1, u2 int) ([]int64, error) {
 	return r.repo.MutualFriends(u1, u2)
 }
 
+// Функция изменения типа связи между пользователями
 func (r *RelationshipServiceImpl) ChangeType(u1, u2 int, t string) error {
 	t12 := r.repo.SelectRelationshipWith(u1, u2)
 	t21 := r.repo.SelectRelationshipWith(u2, u1)

@@ -10,10 +10,12 @@ type notificationRepoImpl struct {
 	db *sql.DB
 }
 
+// Функция создания репозитория Уведомления
 func NewNotificationRepo(db *sql.DB) NotificationRepo {
 	return &notificationRepoImpl{db}
 }
 
+// Функция считывания уведомления
 func scanNotification(row MultiScanner, c *model.Notification) error {
 	err := row.Scan(
 		&c.Id,
@@ -27,6 +29,7 @@ func scanNotification(row MultiScanner, c *model.Notification) error {
 	return err
 }
 
+// Функция добавления уведомления
 func (r notificationRepoImpl) Insert(notif *model.Notification) (id int, err error) {
 	query := `insert into Notification(userId, type, fromUserId, postId, cmtId)
 		values ($1, $2, $3, $4, $5) returning id`
@@ -35,6 +38,7 @@ func (r notificationRepoImpl) Insert(notif *model.Notification) (id int, err err
 	return
 }
 
+// Функция получения уведомления
 func (r notificationRepoImpl) Select(userId int) (res []model.Notification, err error) {
 	rows, err := r.db.Query(`select * from Notification where userId=$1 order by id desc limit 20`, userId)
 	if err != nil {

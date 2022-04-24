@@ -7,7 +7,7 @@ import (
 	"app/internal/repository"
 	"app/internal/service"
 )
-
+// Точка входа в программу. 
 func main() {
 	var err error
 	conf, err := config.LoadConfig(".", ".env")
