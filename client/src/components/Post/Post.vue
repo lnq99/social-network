@@ -4,11 +4,7 @@
       <div class="row">
         <short-info :id="data.userId">
           <template v-slot="slotProps">
-            <el-avatar
-              class="ava"
-              :size="40"
-              :src="slotProps.avatars"
-            ></el-avatar>
+            <el-avatar class="ava" :size="40" :src="slotProps.avatars"></el-avatar>
             <div class="post-header-r">
               <span class="post-author">{{ slotProps.uname }}</span>
               <time class="post-time">{{ data.created }}</time>
@@ -21,12 +17,7 @@
         <template #dropdown>
           <el-dropdown-menu>
             <el-dropdown-item disabled>Edit</el-dropdown-item>
-            <el-dropdown-item
-              @click="deletePost(id)"
-              icon="el-icon-delete"
-              divided
-              >Delete</el-dropdown-item
-            >
+            <el-dropdown-item @click="deletePost(id)" icon="el-icon-delete" divided>Delete</el-dropdown-item>
           </el-dropdown-menu>
         </template>
       </el-dropdown>
@@ -36,11 +27,7 @@
       <img :src="data.atchUrl" />
     </div>
     <hr />
-    <react-cmt
-      :id="id"
-      :initReaction="data.reaction"
-      :cmtCount="data.cmtCount"
-    ></react-cmt>
+    <react-cmt :id="id" :initReaction="data.reaction" :cmtCount="data.cmtCount"></react-cmt>
   </card>
 </template>
 
@@ -90,6 +77,7 @@ export default {
   margin-bottom: 12px;
   padding-bottom: $p4;
 }
+
 .post-header {
   display: flex;
   align-items: center;
@@ -97,15 +85,18 @@ export default {
   text-align: left;
   padding: $p4;
 }
+
 .post-header-r {
   display: flex;
   flex-direction: column;
   justify-content: center;
   padding-left: $p4;
 }
+
 .post-author {
   font-weight: 900;
 }
+
 .post-time {
   font-size: 0.8em;
   font-weight: 100;
@@ -115,6 +106,7 @@ export default {
   margin: 0 $p4 $p4 $p4;
   text-align: left;
 }
+
 img {
   width: 100%;
   display: block;
