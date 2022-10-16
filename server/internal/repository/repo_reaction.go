@@ -27,10 +27,28 @@ func scanReaction(row MultiScanner, c *model.Reaction) error {
 
 // Функция добавления новых реакций
 func (r reactionRepoImpl) InsertUpdate(userId, postId int, reaction string) error {
-	query := `insert into Reaction values ($1, $2, $3)
-		on conflict (userId, postId) do update set type = $3`
+	// query := `insert into Reaction values ($1, $2, $3)
+	// 	on conflict (userId, postId) do update set type = $3`
 
-	_, err := r.db.Exec(query, userId, postId, reaction)
+	// _, err := r.db.Exec(query, userId, postId, reaction)
+	// return err
+
+	// TODO: divide into two func
+	var query string
+	var res sql.Result
+	var err error
+	if reaction == "del" {
+		query = `delete from Reaction
+		where userId = $1 and postId = $2`
+		res, err = r.db.Exec(query, userId, postId)
+	} else {
+		query = `insert into Reaction values ($1, $2, $3)
+		on conflict (userId, postId) do update set type = $3`
+		res, err = r.db.Exec(query, userId, postId, reaction)
+	}
+	if err == nil {
+		err = handleRowsAffected(res)
+	}
 	return err
 }
 
